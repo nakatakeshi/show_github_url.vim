@@ -91,16 +91,30 @@ function! l:GetRemoteUrl()
             \ 'g'
         \)
     endif
+    if l:git_remote_url =~ '^git@'
+        let l:git_remote_url = substitute(
+            \l:git_remote_url,
+            \'^git@',
+            \ '',
+            \ 'g'
+        \)
+        let l:git_remote_url = substitute(
+            \l:git_remote_url,
+            \':',
+            \ '/',
+            \ 'g'
+        \)
+        let l:git_remote_url = 'https://' . l:git_remote_url
+    endif
     if l:git_remote_url =~ '\.git$'
-        return substitute(
+        let l:git_remote_url = substitute(
             \l:git_remote_url,
             \'\.git$',
             \ '',
             \ 'g'
         \)
-    else
-      return l:git_remote_url
     endif
+    return l:git_remote_url
 endfunction
 
 let &cpo = s:save_cpo
