@@ -22,12 +22,12 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! GithubUrl()
-    let l:root_path = l:FindGitBranchRoot()
+    let l:root_path = s:FindGitBranchRoot()
     let l:cur_path  = expand("%:p")
     let l:relative_path = substitute(l:cur_path,l:root_path . '/', '', 'g')
-    let l:git_full_branch_name = l:GetGitBranchName()
+    let l:git_full_branch_name = s:GetGitBranchName()
 
-    let l:git_remote_url = l:GetRemoteUrl()
+    let l:git_remote_url = s:GetRemoteUrl()
     if l:git_remote_url == ''
         return
     endif
@@ -41,7 +41,7 @@ function! GithubUrl()
 
 endfunction
 
-function! l:FindGitBranchRoot()
+function! s:FindGitBranchRoot()
     let l:cur_dir = expand("%:p")
     let s:search_root_file = '.git'
 
@@ -57,13 +57,13 @@ function! l:FindGitBranchRoot()
     return ''
 endfunction
 
-function! l:GetGitBranchName()
+function! s:GetGitBranchName()
     let l:full_branch_name = system("git rev-parse --abbrev-ref=loose HEAD 2> /dev/null")
     return substitute(l:full_branch_name, '\n', '', 'g')
 endfunction
 
-function! l:GetRemoteUrl()
-    let l:git_branch_name =l:GetGitBranchName()
+function! s:GetRemoteUrl()
+    let l:git_branch_name =s:GetGitBranchName()
     let l:git_remote_branch_name = system(printf(
         \'git branch -a |grep -v "\->" |grep "/%s$" |grep remote |sed "s/  remotes\///" |head -1 |sed "s/\/%s//" 2> /dev/null',
         \substitute(l:git_branch_name, '/', '\\/', 'g'),
