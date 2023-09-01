@@ -65,7 +65,7 @@ endfunction
 function! s:GetRemoteUrl()
     let l:git_branch_name =s:GetGitBranchName()
     let l:git_remote_branch_name = system(printf(
-        \'git branch -a |grep -v "\->" |grep "/%s$" |grep remote |sed "s/  remotes\///" |head -1 |sed "s/\/%s//" 2> /dev/null',
+        \'git branch -a |grep -v "\->" |grep "/%s\$" |grep remote |sed "s/  remotes\///" |head -1 |sed "s/\/%s//" 2> /dev/null',
         \substitute(l:git_branch_name, '/', '\\/', 'g'),
         \substitute(l:git_branch_name, '/', '\\/', 'g'),
     \))
