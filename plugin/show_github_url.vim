@@ -71,26 +71,27 @@ function! s:GetRemoteUrl()
     \))
     let l:git_remote_url = ''
 
-    " when current is local repository, then return ''
+    let l:git_remote_name = substitute(
+        \l:git_remote_branch_name,
+        \'\n',
+        \'',
+        \'g'
+    \)
+
+    " when current is local repository, then create unexist remote branch name
     if l:git_remote_branch_name == ''
-        return ''
-    else
-        let l:git_remote_name = substitute(
-            \l:git_remote_branch_name,
-            \'\n',
-            \'',
-            \'g'
-        \)
-        let l:git_remote_url = substitute(
-            \system(printf(
-                \"git config remote.%s.url 2> /dev/null",
-                \l:git_remote_name,
-            \)),
-            \ '\n',
-            \ '',
-            \ 'g'
-        \)
+        let l:git_remote_name = "origin"
     endif
+
+    let l:git_remote_url = substitute(
+        \system(printf(
+            \"git config remote.%s.url 2> /dev/null",
+            \l:git_remote_name,
+        \)),
+        \ '\n',
+        \ '',
+        \ 'g'
+    \)
     if l:git_remote_url =~ '^git@'
         let l:git_remote_url = substitute(
             \l:git_remote_url,
