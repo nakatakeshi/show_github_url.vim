@@ -32,13 +32,16 @@ function! GithubUrl()
         return
     endif
 
-    echo printf("%s/blob/%s/%s#L%s",
+
+    let l:url = printf("%s/blob/%s/%s#L%s",
         \l:git_remote_url,
         \l:git_full_branch_name,
         \l:relative_path,
         \line(".")
     \ )
+    echo l:url
 
+    let l:_ = system(printf("open %s", l:url))
 endfunction
 
 function! s:FindGitBranchRoot()
